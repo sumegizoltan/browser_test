@@ -1,0 +1,125 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>TypeScript HTML App</title>
+    <script type="text/javascript">
+
+
+    </script>
+</head>
+<body>
+    <h1>TypeScript HTML App</h1>
+
+    <div id="content"></div>
+
+    <script>
+        function getObjectProp (obj, propName) {
+            var prop = null;
+            if (obj) {
+                if (propName in obj) {
+                    prop = obj[propName];
+                } else if ('prototype' in obj) {
+                    if (propName in obj.prototype) {
+                        prop = obj.prototype[propName];
+                    }
+                } 
+            }
+            return prop;
+        }
+
+        function getPrototype(obj) {
+            if (Object.getPrototypeOf) {
+                return Object.getPrototypeOf(obj);
+            }
+            else
+            if ('__proto__' in obj) {
+                return obj.__proto__;
+            }
+            else if ('constructor' in obj) {
+                return obj.constructor.prototype;
+            }
+            else {
+                return null;
+            }
+        }
+    </script>
+    <script type="text/javascript">
+
+        function createComment(comment) {
+            var content = document.getElementById('content');
+            var div = document.createElement('div');
+            div.innerHTML = '<span>' + comment + '</span>';
+
+            content.appendChild(div);
+        }
+
+        var obj = new Object();
+        var obj2 = {};
+        var arr = new Array();
+        var arr2 = [];
+
+        if (getObjectProp(Object, 'isPrototypeOf')) {
+            var isProtoObject = Object.isPrototypeOf(obj);
+
+            createComment('obj.isPrototypeOf(Object): ' + isProtoObject);
+            createComment('obj2.isPrototypeOf(Object): ' + Object.isPrototypeOf(obj2));
+            createComment('arr.isPrototypeOf(Array): ' + Array.isPrototypeOf(arr));
+            createComment('arr2.isPrototypeOf(Array): ' + Array.isPrototypeOf(arr2));
+            createComment('obj.__proto__ == Object.prototype: ' + (obj.__proto__ == Object.prototype));
+            createComment('Object.__proto__: ' + Object.__proto__);
+            createComment('Object.prototype: ' + Object.prototype);
+            createComment('obj.__proto__: ' + obj.__proto__);
+            createComment('obj.prototype: ' + obj.prototype);
+        }
+        if ('constructor' in Object) {
+            createComment('Object.constructor: ' + Object.constructor);
+        }
+        else {
+            createComment('Object.constructor: --');
+        }
+        if ('constructor' in obj) {
+            createComment('obj.constructor: ' + obj.constructor);
+            if ('constructor' in obj.constructor) {
+                createComment('obj.constructor.constructor: ' + obj.constructor.constructor);
+            }
+        }
+        else {
+            createComment('obj.constructor: --');
+        }
+        if (('constructor' in Object) && ('constructor' in obj)) {
+            createComment('obj.constructor == Object.constructor: ' + (obj.constructor == Object.constructor));
+            createComment('obj.constructor === Object.constructor: ' + (obj.constructor === Object.constructor));
+            createComment('obj.constructor.constructor === Object.constructor: ' + (obj.constructor.constructor === Object.constructor));
+        }
+
+        if ('__proto__' in obj) {
+            var proto1 = obj.__proto__;
+            var proto2 = obj2.__proto__;
+            var proto2 = arr.__proto__;
+            var proto3 = arr2.__proto__;
+
+            createComment('obj.__proto__: ' + isProtoObject);
+            createComment('obj2.__proto__: ' + isProtoObject);
+            createComment('arr.__proto__: ' + isProtoObject);
+            createComment('arr2.__proto__: ' + isProtoObject);
+        }
+
+        var isPrototypeInObject = ('prototype' in Object);
+        createComment('"prototype" in Object: ' + isPrototypeInObject);
+        if (isPrototypeInObject) {
+            createComment('Object.prototype: ' + Object.prototype);
+        }
+
+        createComment('----------------------------------------------');
+        if (getPrototype(obj) == Object.prototype) {
+            createComment('(getPrototype(obj) == Object.prototype): ' + (getPrototype(obj) == Object.prototype));
+            createComment('(getPrototype(arr) == Object.prototype): ' + (getPrototype(arr) == Object.prototype));
+            createComment('(getPrototype(arr) == Array.prototype): ' + (getPrototype(arr) == Array.prototype));
+            createComment('(getPrototype(obj) == Array.prototype): ' + (getPrototype(obj) == Array.prototype));
+        }
+
+    </script>
+</body>
+</html>
