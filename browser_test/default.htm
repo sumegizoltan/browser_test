@@ -30,19 +30,10 @@
         }
 
         function getPrototype(obj) {
-            if (Object.getPrototypeOf) {
-                return Object.getPrototypeOf(obj);
-            }
-            else
-            if ('__proto__' in obj) {
-                return obj.__proto__;
-            }
-            else if ('constructor' in obj) {
-                return obj.constructor.prototype;
-            }
-            else {
-                return null;
-            }
+            if (Object.getPrototypeOf) { return Object.getPrototypeOf(obj) }
+            else if ('__proto__' in obj) { return obj.__proto__ }
+            else if ('constructor' in obj) { return obj.constructor.prototype }
+            else { return null }
         }
     </script>
     <script type="text/javascript">
