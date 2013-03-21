@@ -7,12 +7,28 @@
     <script type="text/javascript">
         
 
-        function createComment(comment, color) {
+        function createComment(comment, expression, color, colorArgument) {
             var content = document.getElementById('content');
             var div = document.createElement('div');
-            div.innerHTML = '<span>' + comment + '</span>';
-            if (color)
-                div.style.color = color;
+            var span = document.createElement('span');
+
+            span.innerText = comment;
+            div.appendChild(span);
+            if (color) span.style.color = color;
+
+            if (expression) {
+                span = document.createElement('span');
+                span.innerText = expression;
+
+                if (typeof expression != 'string') {
+                    span.style.color = (expression) ? 'blue' : 'red';
+                }
+                else {
+                    if (colorArgument) span.style.color = colorArgument;
+                }
+
+                div.appendChild(span);
+            }
 
             content.appendChild(div);
         }
@@ -62,13 +78,13 @@
                     return null
                 };
                 
-                createComment('Object.getPrototypeOf defined...', 'blue');
+                createComment('Object.getPrototypeOf               ', 'defined...', 'gray', 'blue');
             }
             else if (!Object.getPrototypeOf) {
-                createComment('Object.getPrototypeOf definition disabled...', 'red');
+                createComment('Object.getPrototypeOf definition    ', 'disabled...', 'gray', 'red');
             }
             else {
-                createComment('Object.getPrototypeOf already defined...', 'green');
+                createComment('Object.getPrototypeOf               ', 'already defined...', 'gray', 'green');
             }
         }(Object));
     </script>
@@ -82,65 +98,64 @@
         var str2 = ' ';
         var str3 = '';
 
-        createComment('Object.isPrototypeOf: ' + Object.isPrototypeOf);
-        createComment('Array.isPrototypeOf: ' + Array.isPrototypeOf);
-        createComment('Object.getPrototypeOf: ' + Object.getPrototypeOf);
+        createComment('Object.isPrototypeOf:  ', Object.isPrototypeOf);
+        createComment('Array.isPrototypeOf:   ', Array.isPrototypeOf);
+        createComment('Object.getPrototypeOf: ', Object.getPrototypeOf);
         if (!Object.getPrototypeOf) {
-            createComment('Object.prototype.isPrototypeOf(obj): ' + Object.prototype.isPrototypeOf(obj));
+            createComment('Object.prototype.isPrototypeOf(obj): ', Object.prototype.isPrototypeOf(obj));
         }
         if (Object.getPrototypeOf) {
-            createComment('Object.getPrototypeOf(obj): ' + Object.getPrototypeOf(obj));
+            createComment('Object.getPrototypeOf(obj):  ', Object.getPrototypeOf(obj));
         }
         try {
-            createComment('Object.getPrototypeOf(str): ' + Object.getPrototypeOf(str), 'blue');
-            createComment('Object.getPrototypeOf(str2): ' + Object.getPrototypeOf(str2), 'blue');
-            createComment('Object.getPrototypeOf(str3): ' + Object.getPrototypeOf(str3), 'blue');
+            createComment('Object.getPrototypeOf(str):  ', Object.getPrototypeOf(str));
+            createComment('Object.getPrototypeOf(str2): ', Object.getPrototypeOf(str2));
+            createComment('Object.getPrototypeOf(str3): ', Object.getPrototypeOf(str3));
         }
         catch (ex) {
-            createComment('Object.getPrototypeOf(str):     Error', 'red');
-            createComment('Object.getPrototypeOf(str2):     Error', 'red');
-            createComment('Object.getPrototypeOf(str3):     Error', 'red');
+            createComment('Object.getPrototypeOf(str):      Error', null, 'red');
+            createComment('Object.getPrototypeOf(str2):     Error', null, 'red');
+            createComment('Object.getPrototypeOf(str3):     Error', null, 'red');
         }
         try {
-            createComment('Object.prototype.getPrototypeOf(str): ' + Object.prototype.getPrototypeOf(str), 'blue');
-            createComment('Object.prototype.getPrototypeOf(str2): ' + Object.prototype.getPrototypeOf(str2), 'blue');
-            createComment('Object.prototype.getPrototypeOf(str3): ' + Object.prototype.getPrototypeOf(str3), 'blue');
+            createComment('Object.prototype.getPrototypeOf(str):  ', Object.prototype.getPrototypeOf(str));
+            createComment('Object.prototype.getPrototypeOf(str2): ',Object.prototype.getPrototypeOf(str2));
+            createComment('Object.prototype.getPrototypeOf(str3): ',Object.prototype.getPrototypeOf(str3));
         }
         catch (ex) {
-            createComment('Object.prototype.getPrototypeOf(str):     Error', 'red');
-            createComment('Object.prototype.getPrototypeOf(str2):     Error', 'red');
-            createComment('Object.prototype.getPrototypeOf(str3):     Error', 'red');
+            createComment('Object.prototype.getPrototypeOf(str):      Error', null, 'red');
+            createComment('Object.prototype.getPrototypeOf(str2):     Error', null, 'red');
+            createComment('Object.prototype.getPrototypeOf(str3):     Error', null, 'red');
         }
         createComment('-');
-        createComment('Object.prototype.isPrototypeOf(obj): ' + Object.prototype.isPrototypeOf(obj));
-        createComment('Object.prototype.isPrototypeOf(obj2): ' + Object.prototype.isPrototypeOf(obj2));
-        createComment('Object.prototype.isPrototypeOf(arr): ' + Object.prototype.isPrototypeOf(arr));
-        createComment('Object.prototype.isPrototypeOf(arr2): ' + Object.prototype.isPrototypeOf(arr2));
-        createComment('Array.prototype.isPrototypeOf(obj): ' + Array.prototype.isPrototypeOf(obj));
-        createComment('Array.prototype.isPrototypeOf(obj2): ' + Array.prototype.isPrototypeOf(obj2));
-        createComment('Array.prototype.isPrototypeOf(arr): ' + Array.prototype.isPrototypeOf(arr));
-        createComment('Array.prototype.isPrototypeOf(arr2): ' + Array.prototype.isPrototypeOf(arr2));
+        createComment('Object.prototype.isPrototypeOf(obj):  ', Object.prototype.isPrototypeOf(obj));
+        createComment('Object.prototype.isPrototypeOf(obj2): ', Object.prototype.isPrototypeOf(obj2));
+        createComment('Object.prototype.isPrototypeOf(arr):  ', Object.prototype.isPrototypeOf(arr));
+        createComment('Object.prototype.isPrototypeOf(arr2): ', Object.prototype.isPrototypeOf(arr2));
+        createComment('Array.prototype.isPrototypeOf(obj):   ', Array.prototype.isPrototypeOf(obj));
+        createComment('Array.prototype.isPrototypeOf(obj2):  ', Array.prototype.isPrototypeOf(obj2));
+        createComment('Array.prototype.isPrototypeOf(arr):   ', Array.prototype.isPrototypeOf(arr));
+        createComment('Array.prototype.isPrototypeOf(arr2):  ', Array.prototype.isPrototypeOf(arr2));
 		createComment('-');
 
-		createComment('__proto__ in Object: ' + ('__proto__' in Object));
-		createComment('__proto__ in obj: ' + ('__proto__' in obj));
-		createComment('obj.__proto__ == Object.prototype: ' + (obj.__proto__ == Object.prototype));
-		createComment('Object.__proto__: ' + Object.__proto__);
-		createComment('Object.prototype: ' + Object.prototype);
-		createComment('obj.__proto__: ' + obj.__proto__);
-		createComment('obj.prototype: ' + obj.prototype);
+		createComment('__proto__ in Object: ', ('__proto__' in Object));
+		createComment('__proto__ in obj:    ', ('__proto__' in obj));
+		createComment('obj.__proto__ == Object.prototype: ', (obj.__proto__ == Object.prototype));
+		createComment('Object.__proto__: ', Object.__proto__);
+		createComment('Object.prototype: ', Object.prototype);
+		createComment('obj.__proto__:    ', obj.__proto__);
+		createComment('obj.prototype:    ', obj.prototype);
 		
-		createComment('Object.constructor: ' + Object.constructor);
-        createComment('Object.constructor: --------');
+		createComment('Object.constructor: ', Object.constructor);
         
 		
         if ('constructor' in obj) {
-            createComment('obj.constructor: ' + obj.constructor);
-            createComment('obj.constructor == Object.constructor: ' + (obj.constructor == Object.constructor));
-            createComment('obj.constructor === Object.constructor: ' + (obj.constructor === Object.constructor));
+            createComment('obj.constructor: ', obj.constructor);
+            createComment('obj.constructor == Object.constructor:  ', (obj.constructor == Object.constructor));
+            createComment('obj.constructor === Object.constructor: ', (obj.constructor === Object.constructor));
             if ('constructor' in obj.constructor) {
-                createComment('obj.constructor.constructor: ' + obj.constructor.constructor);
-                createComment('obj.constructor.constructor === Object.constructor: ' + (obj.constructor.constructor === Object.constructor));
+                createComment('obj.constructor.constructor: ', obj.constructor.constructor);
+                createComment('obj.constructor.constructor === Object.constructor: ', (obj.constructor.constructor === Object.constructor));
             }
         }
         else {
@@ -149,26 +164,26 @@
         
         
 
-		createComment('obj.__proto__: ' + obj.__proto__);
-		createComment('obj2.__proto__: ' + obj2.__proto__);
-		createComment('arr.__proto__: ' + arr.__proto__);
-		createComment('arr2.__proto__: ' + arr2.__proto__);
+        createComment('obj.__proto__:  ', obj.__proto__);
+        createComment('obj2.__proto__: ', obj2.__proto__);
+        createComment('arr.__proto__:  ', arr.__proto__);
+        createComment('arr2.__proto__: ', arr2.__proto__);
 
-        createComment('"prototype" in Object: ' + ('prototype' in Object));
-        createComment('Object.prototype: ' + Object.prototype);
+        createComment('"prototype" in Object: ', ('prototype' in Object));
+        createComment('Object.prototype:      ', Object.prototype);
 
         createComment('----------------------------------------------');
         
-		createComment('(getPrototype(obj) == Object.prototype): ' + (getPrototype(obj) == Object.prototype));
-		createComment('(getPrototype(arr) == Object.prototype): ' + (getPrototype(arr) == Object.prototype));
-		createComment('(getPrototype(arr) == Array.prototype): ' + (getPrototype(arr) == Array.prototype));
-		createComment('(getPrototype(obj) == Array.prototype): ' + (getPrototype(obj) == Array.prototype));
-		createComment(' ');
+        createComment('(getPrototype(obj) == Object.prototype): ', (getPrototype(obj) == Object.prototype));
+        createComment('(getPrototype(arr) == Object.prototype): ', (getPrototype(arr) == Object.prototype));
+        createComment('(getPrototype(arr) == Array.prototype):  ', (getPrototype(arr) == Array.prototype));
+        createComment('(getPrototype(obj) == Array.prototype):  ', (getPrototype(obj) == Array.prototype));
+		createComment('-');
 		if (Object.getPrototypeOf) {
-		    createComment('(Object.getPrototypeOf(obj) == Object.prototype): ' + (Object.getPrototypeOf(obj) == Object.prototype));
-		    createComment('(Object.getPrototypeOf(arr) == Object.prototype): ' + (Object.getPrototypeOf(arr) == Object.prototype));
-		    createComment('(Object.getPrototypeOf(arr) == Array.prototype): ' + (Object.getPrototypeOf(arr) == Array.prototype));
-		    createComment('(Object.getPrototypeOf(obj) == Array.prototype): ' + (Object.getPrototypeOf(obj) == Array.prototype));
+		    createComment('(Object.getPrototypeOf(obj) == Object.prototype): ', (Object.getPrototypeOf(obj) == Object.prototype));
+		    createComment('(Object.getPrototypeOf(arr) == Object.prototype): ', (Object.getPrototypeOf(arr) == Object.prototype));
+		    createComment('(Object.getPrototypeOf(arr) == Array.prototype):  ', (Object.getPrototypeOf(arr) == Array.prototype));
+		    createComment('(Object.getPrototypeOf(obj) == Array.prototype):  ', (Object.getPrototypeOf(obj) == Array.prototype));
 		}
 
     </script>
