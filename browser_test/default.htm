@@ -29,12 +29,35 @@
             return prop;
         }
 
-        function getPrototype(obj) {
-            if (Object.getPrototypeOf) { return Object.getPrototypeOf(obj) }
-            else if ('__proto__' in obj) { return obj.__proto__ }
-            else if ('constructor' in obj) { return obj.constructor.prototype }
-            else { return null }
+
+        function getPrototype() {
+            if ('__proto__' in this) return this.__proto__
+            if ('constructor' in this) return this.constructor.prototype
+            return null
         }
+
+        (function (Object){
+            function getPrototypeOf() {
+                if ('__proto__' in this) return this.__proto__
+                if ('constructor' in this) return this.constructor.prototype
+                return null
+            }
+
+            Object.prototype._getPrototypeOf = function () {
+                if ('__proto__' in this) return this.__proto__
+                if ('constructor' in this) return this.constructor.prototype
+                return null
+            };
+
+            Object._getPrototypeOf = function (obj) {
+                if (!obj) return null
+                return obj._getPrototypeOf()
+            };
+
+            if (!Object.getPrototypeOf) {
+                //Object.prototype.getPrototypeOf = new getPrototype
+            }
+        }(Object));
     </script>
     <script type="text/javascript">
 
@@ -50,6 +73,13 @@
         var obj2 = {};
         var arr = new Array();
         var arr2 = [];
+
+        createComment('Object.getPrototypeOf: ' + Object.getPrototypeOf);
+        createComment('Object._getPrototypeOf: ' + Object._getPrototypeOf);
+        createComment('obj._getPrototypeOf: ' + obj._getPrototypeOf);
+        createComment('obj._getPrototypeOf(): ' + obj._getPrototypeOf());
+        createComment('Object._getPrototypeOf: ' + Object._getPrototypeOf);
+        createComment('Object._getPrototypeOf(obj): ' + Object._getPrototypeOf(obj));
 
         if (getObjectProp(Object, 'isPrototypeOf')) {
             var isProtoObject = Object.isPrototypeOf(obj);
