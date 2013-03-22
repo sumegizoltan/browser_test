@@ -4,73 +4,9 @@
 <head>
     <meta charset="utf-8" />
     <title>TypeScript HTML App</title>
+    <script type="text/javascript" src="Script1.js"></script>
     <script type="text/javascript">
         
-
-        function createComment(comment, expression, defaultValue, color, colorArgument, isExpMissing) {
-            var tbody = document.getElementById('tbodyContent');
-            var tr = document.createElement('tr');
-            var td = document.createElement('td');
-            var span = document.createElement('span');
-            var expResult = (expression);
-            var calculatedColor;
-
-            // comment
-            if (color) td.style.color = color;
-            td.style.width = '320px';
-            td.innerHTML = (comment) ? comment : '&nbsp;';
-            tr.appendChild(td);
-
-            // expression
-            td = document.createElement('td');
-            td.style.width = '320px';
-            if (!isExpMissing || (expression !== null && expression !== undefined)) {
-				
-				if (expression === null) td.innerText = 'null'
-				else if (expression === undefined) td.innerText = 'undefined';
-                else td.innerText = new String(expression);
-				
-				colorize(td, colorArgument, expression);
-            }
-            tr.appendChild(td);
-
-            // default
-            td = document.createElement('td');
-            td.innerHTML = (defaultValue) ? defaultValue : '&nbsp;';
-            colorize(td, 'gray', expression);
-            tr.appendChild(td);
-
-            tbody.appendChild(tr);
-        }
-
-        function colorize(td, colorArgument, expression) {
-            var calculatedColor;
-            var exp = td.innerText;
-
-            if (/^null|undefined|Error/.test(exp)) calculatedColor = 'red';
-            else if (/^true/.test(exp)) calculatedColor = 'blue';
-            else if (/^false/.test(exp)) calculatedColor = 'purple';
-            else if (/^function/.test(exp)) calculatedColor = 'brown';
-            else if (/^\[/.test(exp)) calculatedColor = 'cadetblue';
-            else if (!colorArgument && typeof expression == 'string') calculatedColor = 'green';
-            else if (colorArgument) calculatedColor = colorArgument;
-
-            if (calculatedColor) td.style.color = calculatedColor;
-        }
-		
-		function createTextComment(comment, expression, color) {
-		    createComment(comment, expression, '', color, null, (expression === null || expression === undefined));
-		}
-		
-		function tryComment(comment, expression, defaultValue) {
-			try {
-			    createComment(comment, expression(), defaultValue);
-			}
-			catch(ex) {
-			    createComment(comment, 'Error', defaultValue, null, 'red');
-			}
-		}
-
     </script>
 </head>
 <body>
@@ -213,10 +149,14 @@
 		createComment('__proto__ in obj:    ', ('__proto__' in obj), 'true');
 		createComment('obj.__proto__ == Object.prototype: ', (obj.__proto__ == Object.prototype), 'true');
 		createComment('Object.__proto__: ', Object.__proto__, 'function Empty() {}');
-		createComment('Object.prototype: ', Object.prototype, '[object Object]');
 		createComment('obj.__proto__:    ', obj.__proto__, '[object Object]');
+		createComment('obj2.__proto__:   ', obj2.__proto__, '[object Object]');
+		createComment('arr.__proto__:    ', arr.__proto__, 'Array[0]');
+		createComment('arr2.__proto__:   ', arr2.__proto__, 'Array[0]');
+
+		createComment('Object.prototype: ', Object.prototype, '[object Object]');
 		createComment('obj.prototype:    ', obj.prototype, 'undefined');
-		
+
 		createComment('Object.constructor: ', Object.constructor, 'function Function() { [native code] }');
         
 		
@@ -225,12 +165,11 @@
 		tryComment('obj.constructor === Object.constructor: ', function () { return (obj.constructor === Object.constructor) }, 'false');
 		tryComment('obj.constructor.constructor: ', function () { return obj.constructor.constructor }, 'function Function() { [native code] }');
 		tryComment('obj.constructor.constructor === Object.constructor: ', function () { return (obj.constructor.constructor === Object.constructor) }, 'true');
-        
-		createComment('obj.__proto__:  ', obj.__proto__, '[object Object]');
-		createComment('obj2.__proto__: ', obj2.__proto__, '[object Object]');
-		createComment('arr.__proto__:  ', arr.__proto__, '');
-		createComment('arr2.__proto__: ', arr2.__proto__, '');
 
+		tryComment('arr.constructor: ', function () { return arr.constructor }, 'function Array() { [native code] }');
+		tryComment('arr2.constructor: ', function () { return arr2.constructor }, 'function Array() { [native code] }');
+		tryComment('num.constructor: ', function () { return num.constructor }, 'function Number() { [native code] }');
+        
 		createComment('"prototype" in Object: ', ('prototype' in Object), 'true');
 		createComment('Object.prototype:      ', Object.prototype, '[object Object]');
 
