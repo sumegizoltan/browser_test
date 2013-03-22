@@ -44,6 +44,7 @@
 
         (function (Object) {
             var new_definitionEnabled = false;
+            var proto_definitionEnabled = true; // __proto__ in IE
 
             if (!Object.getPrototypeOf && new_definitionEnabled) {
                 Object.getPrototypeOf = function (obj) {
@@ -62,7 +63,44 @@
             else {
                 createComment('Object.getPrototypeOf               ', 'already defined...', '', 'gray', 'green');
             }
-			createTextComment('-');
+            createTextComment('-');
+
+            if (!('__proto__' in Object) && proto_definitionEnabled) {
+                (function (fn) {
+
+                    function Empty() { }
+                    Empty.prototype.__proto__ = (new Empty).constructor;
+                    Empty.prototype.constructor = (new Empty).constructor;
+                    Empty.prototype.__proto__ = (new Empty).constructor;
+
+                    Function.prototype.__proto__ = (new Empty).constructor;
+                    Function.__proto__ = Function.prototype; // = Function.prototype.__proto__ = (new Empty).constructor;
+
+                    Object.prototype.__proto__ = new Object;
+                    Object.prototype.__proto__ = Object.prototype;
+                    Array.prototype.__proto__ = new Array;
+                    Array.prototype.__proto__ = Array.prototype;
+                    Number.prototype.__proto__ = new Number;
+                    Number.prototype.__proto__ = Number.prototype;
+                    Boolean.prototype.__proto__ = new Boolean;
+                    Boolean.prototype.__proto__ = Boolean.prototype;
+                    String.prototype.__proto__ = new String;
+                    String.prototype.__proto__ = String.prototype;
+                    Date.prototype.__proto__ = new Date;
+                    Date.prototype.__proto__ = Date.prototype;
+                    RegExp.prototype.__proto__ = new RegExp;
+                    RegExp.prototype.__proto__ = RegExp.prototype;
+                }(Function));
+
+                createComment('Object.__proto__               ', 'defined...', '', 'gray', 'blue');
+            }
+            else if (!Object.getPrototypeOf) {
+                createComment('Object.__proto__ definition    ', 'disabled...', '', 'gray', 'red');
+            }
+            else {
+                createComment('Object.__proto__               ', 'already defined...', '', 'gray', 'green');
+            }
+            createTextComment('-');
         }(Object));
     </script>
     <script type="text/javascript">
@@ -83,6 +121,9 @@
         var num1 = 1;
         var bool = true;
         var bool2 = false;
+        var fn = function () { this.x = 0; };
+        var fn0 = function () {};
+        var fnNew = new fn();
 
 		createTextComment('Declaration:  ');
 		createTextComment('var obj = new Object();', null, 'gray');
@@ -115,8 +156,6 @@
         createComment("(typeof Str == 'String'):  ", (typeof Str == 'String'), 'false');
         createComment("(typeof Str == 'object'):  ", (typeof Str == 'object'), 'true');
         createComment("(typeof str == 'string'):  ", (typeof str == 'string'), 'true');
-        createComment("(Str.__proto__ == Object.prototype):  ", (Str.__proto__ == Object.prototype), 'false');
-        createComment("(Str.__proto__ == String.prototype):  ", (Str.__proto__ == String.prototype), 'true');
 		
         tryComment('String.prototype.getPrototypeOf(Str):       ', function () { return String.prototype.getPrototypeOf(Str) }, 'Error');
         tryComment('Object.prototype.getPrototypeOf(Str):       ', function () { return Object.prototype.getPrototypeOf(Str) }, 'Error');
@@ -147,17 +186,45 @@
 
 		createComment('__proto__ in Object: ', ('__proto__' in Object), 'true');
 		createComment('__proto__ in obj:    ', ('__proto__' in obj), 'true');
-		createComment('obj.__proto__ == Object.prototype: ', (obj.__proto__ == Object.prototype), 'true');
+
+		createComment('Function.__proto__: ', Function.__proto__, 'function Empty() {}');
 		createComment('Object.__proto__: ', Object.__proto__, 'function Empty() {}');
+		createComment('Array.__proto__: ', Array.__proto__, 'function Empty() {}');
+		createComment('Number.__proto__: ', Number.__proto__, 'function Empty() {}');
+		createComment('Boolean.__proto__: ', Boolean.__proto__, 'function Empty() {}');
+		createComment('String.__proto__: ', String.__proto__, 'function Empty() {}');
+		createComment('Date.__proto__: ', Date.__proto__, 'function Empty() {}');
+		createComment('RegExp.__proto__: ', RegExp.__proto__, 'function Empty() {}');
+
 		createComment('obj.__proto__:    ', obj.__proto__, '[object Object]');
 		createComment('obj2.__proto__:   ', obj2.__proto__, '[object Object]');
 		createComment('arr.__proto__:    ', arr.__proto__, 'Array[0]');
 		createComment('arr2.__proto__:   ', arr2.__proto__, 'Array[0]');
+		tryComment('fn.__proto__:    ', function () { return fn.__proto__ }, 'function Empty() {}');
+		tryComment('fn0.__proto__:    ', function () { return fn0.__proto__ }, 'function Empty() {}');
+		tryComment('fnNew.__proto__:    ', function () { return fnNew.__proto__ }, '[object Object]');
+		tryComment('num.__proto__:    ', function () { return num.__proto__ }, 'Number');
+		tryComment('num0.__proto__:   ', function () { return num0.__proto__ }, 'Number');
+		tryComment('num_.__proto__:   ', function () { return num_.__proto__ }, 'Number');
+		tryComment('num1.__proto__:   ', function () { return num1.__proto__ }, 'Number');
+		tryComment('bool.__proto__:   ', function () { return bool.__proto__ }, 'Boolean');
+		tryComment('bool2.__proto__:  ', function () { return bool2.__proto__ }, 'Boolean');
+		tryComment('str.__proto__:    ', function () { return str.__proto__ }, "String");
+		tryComment('str2.__proto__:   ', function () { return str2.__proto__ }, "String");
+		tryComment('str3.__proto__:   ', function () { return str3.__proto__ }, "String");
+		tryComment('Str.__proto__:    ', function () { return Str.__proto__ }, "String");
 
 		createComment('Object.prototype: ', Object.prototype, '[object Object]');
 		createComment('obj.prototype:    ', obj.prototype, 'undefined');
 
+		createComment('Function.constructor: ', Function.constructor, 'function Function() { [native code] }');
 		createComment('Object.constructor: ', Object.constructor, 'function Function() { [native code] }');
+		createComment('Array.constructor: ', Array.constructor, 'function Function() { [native code] }');
+		createComment('Number.constructor: ', Number.constructor, 'function Function() { [native code] }');
+		createComment('Boolean.constructor: ', Boolean.constructor, 'function Function() { [native code] }');
+		createComment('String.constructor: ', String.constructor, 'function Function() { [native code] }');
+		createComment('Date.constructor: ', Date.constructor, 'function Function() { [native code] }');
+		createComment('RegExp.constructor: ', RegExp.constructor, 'function Function() { [native code] }');
         
 		
 		tryComment('obj.constructor: ', function () { return obj.constructor }, 'function Object() { [native code] }');
@@ -166,9 +233,14 @@
 		tryComment('obj.constructor.constructor: ', function () { return obj.constructor.constructor }, 'function Function() { [native code] }');
 		tryComment('obj.constructor.constructor === Object.constructor: ', function () { return (obj.constructor.constructor === Object.constructor) }, 'true');
 
-		tryComment('arr.constructor: ', function () { return arr.constructor }, 'function Array() { [native code] }');
-		tryComment('arr2.constructor: ', function () { return arr2.constructor }, 'function Array() { [native code] }');
-		tryComment('num.constructor: ', function () { return num.constructor }, 'function Number() { [native code] }');
+		tryComment('fn.constructor:    ', function () { return fn.constructor }, 'function Function() { [native code] }');
+		tryComment('fn0.constructor:   ', function () { return fn0.constructor }, 'function Function() { [native code] }');
+		tryComment('fnNew.constructor: ', function () { return fnNew.constructor }, 'function Object() { [native code] }');
+		tryComment('arr.constructor:   ', function () { return arr.constructor }, 'function Array() { [native code] }');
+		tryComment('arr2.constructor:  ', function () { return arr2.constructor }, 'function Array() { [native code] }');
+		tryComment('num.constructor:   ', function () { return num.constructor }, 'function Number() { [native code] }');
+		tryComment('num0.constructor:  ', function () { return num0.constructor }, 'function Number() { [native code] }');
+		tryComment('bool.constructor:  ', function () { return bool.constructor }, 'function Boolean() { [native code] }');
         
 		createComment('"prototype" in Object: ', ('prototype' in Object), 'true');
 		createComment('Object.prototype:      ', Object.prototype, '[object Object]');
@@ -187,6 +259,22 @@
 		tryComment('(Object.getPrototypeOf(obj) == Array.prototype):  ', function () { return (Object.getPrototypeOf(obj) == Array.prototype) }, 'false');
 	
 
+		tryComment('fn.__proto__ == Function.prototype:    ', function () { return fn.__proto__ == Function.prototype }, 'true');
+		tryComment('fn0.__proto__ == Function.prototype:   ', function () { return fn0.__proto__ == Function.prototype }, 'true');
+		tryComment('fnNew.__proto__ == Function.prototype: ', function () { return fnNew.__proto__ == Function.prototype }, 'false');
+		tryComment('fnNew.__proto__ == Object.prototype: ', function () { return fnNew.__proto__ == Object.prototype }, 'false');
+		tryComment('obj.__proto__ == Object.prototype:   ', function () { return obj.__proto__ == Object.prototype }, 'true');
+		tryComment('arr.__proto__ == Array.prototype:    ', function () { return arr.__proto__ == Array.prototype }, 'true');
+		tryComment('arr2.__proto__ == Array.prototype:   ', function () { return arr2.__proto__ == Array.prototype }, 'true');
+		tryComment('num.__proto__ == Number.prototype:   ', function () { return num.__proto__ == Number.prototype }, 'true');
+		tryComment('num0.__proto__ == Number.prototype:  ', function () { return num0.__proto__ == Number.prototype }, 'true');
+		tryComment('bool.__proto__ == Boolean.prototype: ', function () { return bool.__proto__ == Boolean.prototype }, 'true');
+		tryComment('str.__proto__ == String.prototype:   ', function () { return str.__proto__ == String.prototype }, 'true');
+		tryComment('str2.__proto__ == String.prototype:  ', function () { return str2.__proto__ == String.prototype }, 'true');
+		tryComment('str3.__proto__ == String.prototype:  ', function () { return str3.__proto__ == String.prototype }, 'true');
+		tryComment('Str.__proto__ == String.prototype:   ', function () { return Str.__proto__ == String.prototype }, 'true');
+
+		tryComment("Str.__proto__ == Object.prototype:   ", function () { return Str.__proto__ == Object.prototype }, 'false');
     </script>
 </body>
 </html>
